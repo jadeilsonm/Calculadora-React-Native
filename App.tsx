@@ -5,12 +5,23 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 export default function App() {
   const [value, setValue] = useState('ERROR');
 
-  const buttons = ['AC','DEL','%','/','7','8','9','*','4','5','6','-','3','2','1','+','0','.','+/-','=',]
+  const buttons = ['AC','DEL','%','/','7','8','9','*','4','5','6','-','3','2','1','+','0','.','=',]
   
   const valueFinally = (valueButton: string) => {
-    if (valueButton === 'DEL'){
+    if (valueButton === 'DEL') {
       setValue('');
-    } else {
+    } else if (valueButton === 'AC') {
+      setValue(value.substring(0, value.length - 1))
+    } else if (valueButton === '=') {
+      let arrayValues;
+      if (value.includes('+')){
+        arrayValues = value.split("+")
+        const value1: number = +arrayValues[0]
+        const value2: number = +arrayValues[1].substring(0, value.length - 1)
+        setValue(String(value1 + value2))
+      }
+    }
+    else {
       setValue(value.concat(valueButton));
     }
   }
