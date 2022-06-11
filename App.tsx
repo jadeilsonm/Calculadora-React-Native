@@ -15,10 +15,9 @@ export default function App() {
     } else if (valueButton === '=') {
       let arrayValues;
       if (value.includes('+')){
-        arrayValues = value.split("+")
-        const value1: number = +arrayValues[0]
-        const value2: number = +arrayValues[1].substring(0, value.length - 1)
-        setValue(String(value1 + value2))
+        arrayValues = value.split('+')
+        const returnV = arrayValues.reduce((acc, value) => acc + +value, 0)
+        setValue(String(returnV))
       }
     }
     else {
