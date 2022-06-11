@@ -8,7 +8,11 @@ export default function App() {
   const buttons = ['AC','DEL','%','/','7','8','9','*','4','5','6','-','3','2','1','+','0','.','+/-','=',]
   
   const valueFinally = (valueButton: string) => {
-    setValue(value.concat(valueButton));
+    if (valueButton === 'DEL'){
+      setValue('');
+    } else {
+      setValue(value.concat(valueButton));
+    }
   }
   
   return (
