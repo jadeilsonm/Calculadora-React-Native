@@ -2,19 +2,21 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+const BUTTONS = ['AC','DEL','%','/','7','8','9','*','4','5','6','-','3','2','1','+','0','.','=']
+const SIGNAIL = /\W/ // regex de validação de sinias
+const EXPRESSMATHEMATIC = new RegExp('[0-9]+[+|*|/|-][0-9]')
+const EXPRESSMATHEMATICPOT = new RegExp('[0-9]+[*]{2}[0-9]')
+
 export default function App() {
   const [value, setValue] = useState('');
   
-  const buttons = ['AC','DEL','%','/','7','8','9','*','4','5','6','-','3','2','1','+','0','.','=']
 
   const valueFinally = (valueButton: string) => {
-    const regSinais = /\W/
-    
     if (valueButton === 'DEL') {
       setValue('');
     } else if (valueButton === 'AC') {
       setValue(value.substring(0, value.length - 1))
-    } else if (valueButton === '=' && regSinais.test(value) && value.length > 0) {
+    } else if (valueButton === '=' && (EXPRESSMATHEMATIC.test(value) || EXPRESSMATHEMATICPOT.test(value))) {
       try {
         const result = eval(value)
         setValue(String(result))
@@ -23,7 +25,9 @@ export default function App() {
       }
     }
     else {
-      if (value.length === 0 && valueButton === '=') {
+      if (value.length === 0 && SIGNAIL.test(valueButton)) {
+        setValue(value);
+      } else if (valueButton === '=') {
         setValue(value);
       } else {
         setValue(value.concat(valueButton));
@@ -37,7 +41,7 @@ export default function App() {
         <Text style={styles.textResult}>{value}</Text>
       </View>
       <View style={styles.containerButton}>
-        {buttons.map(button =>
+        {BUTTONS.map(button =>
           <TouchableOpacity 
             key={button} 
             style={styles.button}
