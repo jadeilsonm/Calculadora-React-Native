@@ -3,25 +3,31 @@ import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function App() {
-  const [value, setValue] = useState('ERROR');
-
-  const buttons = ['AC','DEL','%','/','7','8','9','*','4','5','6','-','3','2','1','+','0','.','=',]
+  const [value, setValue] = useState('');
   
+  const buttons = ['AC','DEL','%','/','7','8','9','*','4','5','6','-','3','2','1','+','0','.','=']
+
   const valueFinally = (valueButton: string) => {
+    const regSinais = /\W/
+    
     if (valueButton === 'DEL') {
       setValue('');
     } else if (valueButton === 'AC') {
       setValue(value.substring(0, value.length - 1))
-    } else if (valueButton === '=') {
-      let arrayValues;
-      if (value.includes('+')){
-        arrayValues = value.split('+')
-        const returnV = arrayValues.reduce((acc, value) => acc + +value, 0)
-        setValue(String(returnV))
+    } else if (valueButton === '=' && regSinais.test(value) && value.length > 0) {
+      try {
+        const result = eval(value)
+        setValue(String(result))
+      } catch (error) {
+        console.log(error); 
       }
     }
     else {
-      setValue(value.concat(valueButton));
+      if (value.length === 0 && valueButton === '=') {
+        setValue(value);
+      } else {
+        setValue(value.concat(valueButton));
+      }
     }
   }
   
